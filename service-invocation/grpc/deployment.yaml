@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-client
+  labels:
+    app: grpc-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-client
+  template:
+    metadata:
+      labels:
+        app: grpc-client
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "grpc-client"
+        dapr.io/app-protocol: "grpc"
+#        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: client 
+        image: sunboy0213/grpc-client:latest
+        imagePullPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-server
+  labels:
+    app: grpc-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-server
+  template:
+    metadata:
+      labels:
+        app: grpc-server
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "grpc-server"
+        dapr.io/app-port: "50051"
+        dapr.io/app-protocol: "grpc"
+#        dapr.io/config: "tracing"
+    spec:
+      containers:
+        - name: server
+          image: sunboy0213/grpc-server:latest
+          ports:
+            - containerPort: 50051
+          imagePullPolicy: Always
+

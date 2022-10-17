@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-client
+  labels:
+    app: http-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-client
+  template:
+    metadata:
+      labels:
+        app: http-client
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "http-client"
+        dapr.io/log-level: "debug"
+#        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: client 
+        image: sunboy0213/http-client:latest
+        imagePullPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-server
+  labels:
+    app: http-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-server
+  template:
+    metadata:
+      labels:
+        app: http-server
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "http-server"
+        dapr.io/app-port: "8888"
+        dapr.io/log-level: "debug"
+#        dapr.io/config: "tracing"
+    spec:
+      containers:
+        - name: server
+          image: sunboy0213/http-server:latest
+          ports:
+            - containerPort: 50051
+          imagePullPolicy: Always
+

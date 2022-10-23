@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: state-demo
+  labels:
+    app: state
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: state
+  template:
+    metadata:
+      labels:
+        app: state
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "state-demo"
+    spec:
+      containers:
+      - name: state
+        image: sunboy0213/state-demo:latest
+        imagePullPolicy: Always
